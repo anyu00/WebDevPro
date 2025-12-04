@@ -811,6 +811,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Small delay to ensure permissions are fully loaded
+        await new Promise(resolve => setTimeout(resolve, 100));
+
         // Filter tabs based on permissions
         await filterTabsByPermissions(userPermissions);
 
