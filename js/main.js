@@ -839,6 +839,9 @@ document.addEventListener('DOMContentLoaded', () => {
 async function filterTabsByPermissions(permissions) {
     console.log('Filtering tabs with permissions:', permissions);
     
+    // On GitHub Pages, always show all tabs for demo purposes
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    
     const tabConfig = {
         'manageCatalog': { label: 'Manage Catalog', permission: 'manageCatalog' },
         'placeOrder': { label: 'Place Order', permission: 'placeOrder' },
@@ -853,6 +856,13 @@ async function filterTabsByPermissions(permissions) {
     document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
         const tabId = btn.getAttribute('data-tab');
         const tabConfig_item = tabConfig[tabId];
+
+        // On GitHub Pages, show all tabs
+        if (isGitHubPages) {
+            console.log('GitHub Pages detected - showing all tabs');
+            btn.style.display = 'block';
+            return;
+        }
 
         if (tabConfig_item && permissions[tabConfig_item.permission]) {
             if (permissions[tabConfig_item.permission].read === true) {
