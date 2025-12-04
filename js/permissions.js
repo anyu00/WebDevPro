@@ -21,10 +21,13 @@ export async function getUserPermissions(userId) {
     }
 
     const userRole = userSnapshot.val().role;
+    console.log('User role:', userRole);
 
     // If admin, return full permissions
     if (userRole === 'admin') {
-      return getAdminPermissions();
+      const adminPerms = getAdminPermissions();
+      console.log('Admin permissions granted:', adminPerms);
+      return adminPerms;
     }
 
     // If user, fetch custom permissions
@@ -32,9 +35,11 @@ export async function getUserPermissions(userId) {
     const permSnapshot = await get(permRef);
 
     if (permSnapshot.exists()) {
+      console.log('Custom permissions found:', permSnapshot.val());
       return permSnapshot.val();
     } else {
       // Return default user permissions if none exist
+      console.log('No custom permissions, using defaults');
       return getDefaultUserPermissions();
     }
   } catch (error) {
@@ -72,8 +77,7 @@ export function getDefaultUserPermissions() {
     orderEntries: { create: false, read: true, update: false, delete: false },
     reports: { read: true },
     stockCalendar: { read: true },
-    analytics: { read: false }
-    ,
+    analytics: { read: false },
     userManagement: { create: false, read: false, update: false, delete: false }
   };
 }

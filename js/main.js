@@ -837,6 +837,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== FILTER TABS BY PERMISSIONS =====
 async function filterTabsByPermissions(permissions) {
+    console.log('Filtering tabs with permissions:', permissions);
+    
     const tabConfig = {
         'manageCatalog': { label: 'Manage Catalog', permission: 'manageCatalog' },
         'placeOrder': { label: 'Place Order', permission: 'placeOrder' },
@@ -854,11 +856,14 @@ async function filterTabsByPermissions(permissions) {
 
         if (tabConfig_item && permissions[tabConfig_item.permission]) {
             if (permissions[tabConfig_item.permission].read === true) {
+                console.log('Showing tab:', tabId);
                 btn.style.display = 'block';
             } else {
+                console.log('Hiding tab (no read):', tabId);
                 btn.style.display = 'none';
             }
         } else {
+            console.log('Hiding tab (not in config):', tabId);
             btn.style.display = 'none';
         }
     });
@@ -866,6 +871,7 @@ async function filterTabsByPermissions(permissions) {
     // Make first visible tab active
     const firstVisibleBtn = document.querySelector('.sidebar-nav-btn[style="display: block"]');
     if (firstVisibleBtn) {
+        console.log('Activating first visible tab:', firstVisibleBtn.getAttribute('data-tab'));
         firstVisibleBtn.click();  
     }
 }
