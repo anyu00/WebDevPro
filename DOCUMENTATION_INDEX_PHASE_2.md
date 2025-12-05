@@ -4,7 +4,7 @@
 
 This directory contains complete documentation for Phase 2 implementation of the WebDevPro Inventory Management System.
 
----
+--- 
 
 ## 🎯 Start Here
 

@@ -74,8 +74,19 @@
                 <div style="display:flex; align-items:center; gap:12px;">
                     <input type="text" class="search-box" placeholder="Search..." style="background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; width:240px; font-size:14px;">
                     <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
-                    <button class="icon-btn" title="Profile"><i class="fas fa-user-circle"></i></button>
-                    <button class="icon-btn" title="Logout" id="logoutBtnTop"><i class="fa-solid fa-sign-out-alt"></i></button>
+                    <div style="position: relative;">
+                        <button class="icon-btn" title="Profile" id="profileBtn"><i class="fas fa-user-circle"></i></button>
+                        <div class="profile-popover" id="profilePopover">
+                            <div class="profile-header">
+                                <div class="profile-avatar">👤</div>
+                                <div class="profile-info">
+                                    <div class="profile-email" id="userEmailPopover">Loading...</div>
+                                    <div class="profile-role" id="userRolePopover">...</div>
+                                </div>
+                            </div>
+                            <button class="profile-logout" id="logoutBtnPopover">Logout</button>
+                        </div>
+                    </div>
                     <button class="hamburger" id="hamburgerToggle"><i class="fas fa-bars"></i></button>
                 </div>
             </div>
