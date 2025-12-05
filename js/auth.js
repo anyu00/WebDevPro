@@ -37,6 +37,19 @@ export function signupUser(email, password, displayName) {
  */
 export function loginUser(email, password) {
   return signInWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      // Ensure user profile exists in database
+      const uid = userCredential.user.uid;
+      const userRef = ref(db, `Users/${uid}`);
+      return get(userRef).then(snapshot => {
+        if (!snapshot.exists()) {
+          // Create profile if it doesn't exist
+          const role = email === 'admin@example.com' ? 'admin' : 'user';
+          return createUserProfile(uid, email, email.split('@')[0], role);
+        }
+        return userCredential;
+      });
+    })
     .catch(error => {
       console.error('Login error:', error.message);
       throw error;
