@@ -191,7 +191,7 @@ function renderCatalogTablesAccordion() {
     const container = document.getElementById('catalogEntriesAccordion');
     container.innerHTML = '';
     const dbRef = ref(db, 'Catalogs/');
-    onValue(dbRef, (snapshot) => {
+    get(dbRef).then((snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             const catalogs = {};
@@ -259,7 +259,7 @@ function renderOrderTablesAccordion() {
     const container = document.getElementById('orderEntriesAccordion');
     container.innerHTML = '';
     const orderRef = ref(db, 'Orders/');
-    onValue(orderRef, (snapshot) => {
+    get(orderRef).then((snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             const catalogs = {};

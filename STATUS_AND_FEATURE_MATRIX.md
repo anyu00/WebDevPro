@@ -252,7 +252,7 @@
 - Per audit entry: ~200 bytes
 - Per movement entry: ~180 bytes
 - 100 items = ~30KB
-- 1000 items = ~300KB
+- 1000 items = ~300KB   
 
 ---
 
@@ -264,7 +264,7 @@
 ✅ Logout clears session
 
 ### Access Control
-✅ Role-based permissions (Admin/Manager/User)
+✅ Role-based permissions (Admin/Manager/User)   
 ✅ Page-level access control
 ✅ Firebase security rules (if configured)
 
