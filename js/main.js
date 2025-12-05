@@ -72,7 +72,15 @@ function initTabSwitching() {
         topNavBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const tab = btn.getAttribute('data-tab');
-                switchTab(tab);
+                
+                // Hide all tabs
+                document.querySelectorAll('.tab-section').forEach(t => t.style.display = 'none');
+                
+                // Show selected tab
+                const tabElement = document.getElementById('tab-' + tab);
+                if (tabElement) tabElement.style.display = 'block';
+                
+                // Update active states
                 topNavBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 document.querySelectorAll('.sidebar-nav-btn').forEach(b => {
@@ -82,23 +90,21 @@ function initTabSwitching() {
                         b.classList.remove('active');
                     }
                 });
-            });
-        });
-
-        // Top navigation mirrors sidebar behavior
-        topNavBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tab = btn.getAttribute('data-tab');
-                switchTab(tab);
-                topNavBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                document.querySelectorAll('.sidebar-nav-btn').forEach(b => {
-                    if (b.getAttribute('data-tab') === tab) {
-                        b.classList.add('active');
-                    } else {
-                        b.classList.remove('active');
-                    }
-                });
+                
+                // Lazy-load expensive components
+                if (tab === 'stockCalendar' && !window.calendarInitialized) {
+                    initializeCalendar();
+                    window.calendarInitialized = true;
+                }
+                if (tab === 'catalogEntries') renderCatalogTablesAccordion();
+                if (tab === 'orderEntries') renderOrderTablesAccordion();
+                if (tab === 'analytics') {
+                    document.getElementById('analyticsDateRangeCard').style.display = 'block';
+                    fetchAndRenderAnalytics();
+                } else {
+                    const dateCard = document.getElementById('analyticsDateRangeCard');
+                    if (dateCard) dateCard.style.display = 'none';
+                }
             });
         });
     document.getElementById('analyticsDateRangeCard').style.display = 'none';
