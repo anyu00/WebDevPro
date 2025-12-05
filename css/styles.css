@@ -25,7 +25,7 @@ body {
 
 /* Sidebar Styling */
 .sidebar {
-    display: none;
+    display: flex;
     width: 240px;
     min-width: 220px;
     background: #232946;
