@@ -890,23 +890,32 @@ async function filterTabsByPermissions(permissions) {
 function updateUserDisplay(user) {
     const userEmail = document.getElementById('userEmail');
     const userRole = document.getElementById('userRole');
+    const userEmailInline = document.getElementById('userEmailInline');
+    const userRoleInline = document.getElementById('userRoleInline');
 
     if (userEmail) {
         userEmail.textContent = user.email;
     }
+    if (userEmailInline) {
+        userEmailInline.textContent = user.email;
+    }
 
-    if (userRole && currentUser) {
+    if ((userRole || userRoleInline) && currentUser) {
         // Set role display (will be updated with actual role from database)
-        userRole.textContent = 'Loading...';   
+        if (userRole) userRole.textContent = 'Loading...';
+        if (userRoleInline) userRoleInline.textContent = 'Loading...';
 
         // Fetch actual role from database
         const userRef = ref(db, `Users/${user.uid}`);
         get(userRef).then(snapshot => {
             if (snapshot.exists()) {
                 const userData = snapshot.val();
-                const roleText = userData.role === 'admin' ? '👨‍💼 Admin' : '👤 User';
+                const roleText = userData.role === 'admin' ? 'Admin' : 'User';
                 if (userRole) {
                     userRole.textContent = roleText;
+                }
+                if (userRoleInline) {
+                    userRoleInline.textContent = roleText;
                 }
             }
         });

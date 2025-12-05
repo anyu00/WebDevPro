@@ -142,6 +142,40 @@ body {
     color: #232946;
 }
 
+/* User Display in Top Bar */
+.user-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.user-info-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.user-email-inline {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.user-role-inline {
+    font-size: 11px;
+    color: #ffffff;
+    background: #2563eb;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+    text-transform: capitalize;
+}
+
 /* Profile Popover Styling */
 .profile-popover {
     position: absolute;
