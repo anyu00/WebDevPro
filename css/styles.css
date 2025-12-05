@@ -704,6 +704,20 @@ body {
     transform: scale(1.05);
 }
 
+/* Notification Badge */
+#notificationBadge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
+    }
+}
+
 /* Activity Feed Styling */
 .activity-feed-item {
     display: flex;

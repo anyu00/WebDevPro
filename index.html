@@ -88,7 +88,10 @@
                 </div>
                 <div style="display:flex; align-items:center; gap:12px;">
                     <input type="text" class="search-box" placeholder="Search..." style="background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; width:240px; font-size:14px;">
-                    <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
+                    <button class="icon-btn" title="Notifications" id="notificationBtn" style="position: relative;">
+                        <i class="fas fa-bell"></i>
+                        <span id="notificationBadge" style="position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; display: none; align-items: center; justify-content: center; font-weight: 600;">0</span>
+                    </button>
                     <div class="user-display">
                         <div class="user-info-inline">
                             <div class="user-email-inline" id="userEmailInline">Loading...</div>
@@ -208,10 +211,32 @@
 
                     <!-- Activity Feed -->
                     <hr style="margin: 32px 0;">
-                    <div>
-                        <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Recent Activity</h4>
-                        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 400px; overflow-y: auto;" id="activityFeed">
-                            <div style="padding: 16px; text-align: center; color: #999;">Loading recent activities...</div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                        <!-- Left: Activity Feed -->
+                        <div>
+                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Recent Activity</h4>
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 400px; overflow-y: auto;" id="activityFeed">
+                                <div style="padding: 16px; text-align: center; color: #999;">Loading recent activities...</div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Smart Insights -->
+                        <div>
+                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Smart Insights</h4>
+                            
+                            <!-- Low Stock Alert -->
+                            <div id="lowStockAlertBox" style="background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: none;">
+                                <div style="font-weight: 600; color: #b45309; margin-bottom: 6px;">⚠️ Low Stock Alert</div>
+                                <div id="lowStockList" style="font-size: 12px; color: #92400e;"></div>
+                            </div>
+
+                            <!-- Top Demand Insights -->
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+                                <div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">📈 Top Ordered Items</div>
+                                <div id="topDemandList" style="font-size: 12px; color: #666;">
+                                    <div style="padding: 6px 0;">Loading...</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

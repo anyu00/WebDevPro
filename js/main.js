@@ -1359,6 +1359,124 @@ function viewProductDetails(productId) {
     window.showToast('📌 Product ID: ' + productId, 'info');
 }
 
+// ===== SMART NOTIFICATIONS SYSTEM =====
+let activeNotifications = [];
+
+async function initializeSmartNotifications() {
+    try {
+        // Setup notification badge click handler
+        const notificationBtn = document.getElementById('notificationBtn');
+        if (notificationBtn) {
+            notificationBtn.addEventListener('click', showNotificationCenter);
+        }
+        
+        // Scan for alerts periodically
+        checkForAlerts();
+        setInterval(checkForAlerts, 60000); // Check every minute
+        
+    } catch (error) {
+        console.error('Error initializing notifications:', error);
+    }
+}
+
+async function checkForAlerts() {
+    try {
+        const entriesRef = ref(db, 'ManageCatalogEntries');
+        const snapshot = await get(entriesRef);
+        
+        if (!snapshot.exists()) return;
+        
+        activeNotifications = [];
+        const entries = snapshot.val();
+        
+        for (const [key, entry] of Object.entries(entries)) {
+            const stock = parseInt(entry.StockQuantity || 0);
+            const catalogName = entry.CatalogName;
+            
+            // Alert: Out of stock
+            if (stock === 0) {
+                activeNotifications.push({
+                    id: key,
+                    type: 'critical',
+                    title: '❌ Out of Stock',
+                    message: `${catalogName} has no items left`,
+                    timestamp: new Date()
+                });
+            }
+            // Alert: Low stock
+            else if (stock < 5) {
+                activeNotifications.push({
+                    id: key,
+                    type: 'warning',
+                    title: '⚠️ Low Stock',
+                    message: `${catalogName} has only ${stock} items`,
+                    timestamp: new Date()
+                });
+            }
+        }
+        
+        // Update badge
+        updateNotificationBadge(activeNotifications.length);
+        
+    } catch (error) {
+        console.error('Error checking alerts:', error);
+    }
+}
+
+function updateNotificationBadge(count) {
+    const badge = document.getElementById('notificationBadge');
+    if (count > 0) {
+        badge.textContent = count > 99 ? '99+' : count;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+function showNotificationCenter() {
+    if (activeNotifications.length === 0) {
+        window.showToast('✅ No alerts at this time!', 'success');
+        return;
+    }
+    
+    let notificationHtml = '<div style="max-height: 400px; overflow-y: auto;">';
+    activeNotifications.forEach(notif => {
+        const bgColor = notif.type === 'critical' ? '#fee2e2' : '#fef3c7';
+        const borderColor = notif.type === 'critical' ? '#fca5a5' : '#fcd34d';
+        
+        notificationHtml += `
+            <div style="background: ${bgColor}; border-left: 4px solid ${borderColor}; padding: 12px; margin-bottom: 8px; border-radius: 6px;">
+                <div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">${notif.title}</div>
+                <div style="font-size: 12px; color: #666;">${notif.message}</div>
+            </div>
+        `;
+    });
+    notificationHtml += '</div>';
+    
+    // Create modal or show in alert
+    const modal = `
+        <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 400px; margin: 0 auto;">
+            <h3 style="margin-top: 0; color: #1e293b;">📢 Notifications (${activeNotifications.length})</h3>
+            ${notificationHtml}
+            <button onclick="closeNotificationCenter()" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Dismiss</button>
+        </div>
+    `;
+    
+    // Simple alert for now (can be upgraded to modal)
+    alert(`You have ${activeNotifications.length} active alerts. Check the dashboard for details.`);
+}
+
+function closeNotificationCenter() {
+    // Close notification center
+}
+
+// ===== PERIODIC SMART FEATURES UPDATE =====
+setInterval(() => {
+    if (document.getElementById('tab-manageCatalog').style.display === 'block') {
+        renderSmartInsights();
+    }
+}, 30000); // Update every 30 seconds when on dashboard
+
 // ===== DASHBOARD RENDERER =====
 async function renderDashboard() {
     try {
@@ -1397,8 +1515,93 @@ async function renderDashboard() {
         // Render activity feed
         await renderActivityFeed();
         
+        // Render smart insights
+        await renderSmartInsights();
+        
     } catch (error) {
         console.error('Error rendering dashboard:', error);
+    }
+}
+
+async function renderSmartInsights() {
+    try {
+        const entriesRef = ref(db, 'ManageCatalogEntries');
+        const snapshot = await get(entriesRef);
+        
+        if (!snapshot.exists()) {
+            document.getElementById('lowStockAlertBox').style.display = 'none';
+            document.getElementById('topDemandList').innerHTML = '<div style="padding: 6px 0; color: #999;">No data</div>';
+            return;
+        }
+        
+        const entries = snapshot.val();
+        const catalogDemand = {};
+        const stockLevels = {};
+        
+        for (const [key, entry] of Object.entries(entries)) {
+            const catalogName = entry.CatalogName;
+            const stock = parseInt(entry.StockQuantity || 0);
+            const issued = parseInt(entry.IssueQuantity || 0);
+            
+            // Track stock levels
+            stockLevels[catalogName] = stock;
+            
+            // Track demand (issued quantity)
+            if (!catalogDemand[catalogName]) {
+                catalogDemand[catalogName] = 0;
+            }
+            catalogDemand[catalogName] += issued;
+        }
+        
+        // === LOW STOCK ALERTS ===
+        const lowStockItems = Object.entries(stockLevels)
+            .filter(([name, stock]) => stock < 5)
+            .map(([name, stock]) => ({ name, stock }))
+            .sort((a, b) => a.stock - b.stock);
+        
+        const lowStockBox = document.getElementById('lowStockAlertBox');
+        const lowStockList = document.getElementById('lowStockList');
+        
+        if (lowStockItems.length > 0) {
+            lowStockBox.style.display = 'block';
+            let html = '';
+            lowStockItems.forEach(item => {
+                html += `<div style="padding: 4px 0;">• ${item.name.substring(0, 25)}: <strong>${item.stock} left</strong></div>`;
+            });
+            lowStockList.innerHTML = html;
+            
+            // Show toast notification for critical items
+            const criticalItems = lowStockItems.filter(i => i.stock === 0);
+            if (criticalItems.length > 0) {
+                window.showToast(`🔴 ${criticalItems.length} item(s) out of stock!`, 'danger');
+            }
+        } else {
+            lowStockBox.style.display = 'none';
+        }
+        
+        // === TOP DEMAND INSIGHTS ===
+        const topDemand = Object.entries(catalogDemand)
+            .map(([name, demand]) => ({ name, demand }))
+            .sort((a, b) => b.demand - a.demand)
+            .slice(0, 5);
+        
+        const topDemandList = document.getElementById('topDemandList');
+        if (topDemand.length > 0) {
+            let html = '';
+            topDemand.forEach((item, index) => {
+                const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+                html += `<div style="padding: 6px 0; display: flex; justify-content: space-between;">
+                    <span>${medals[index]} ${item.name.substring(0, 20)}...</span>
+                    <strong>${item.demand} orders</strong>
+                </div>`;
+            });
+            topDemandList.innerHTML = html;
+        } else {
+            topDemandList.innerHTML = '<div style="padding: 6px 0; color: #999;">No demand data yet</div>';
+        }
+        
+    } catch (error) {
+        console.error('Error rendering smart insights:', error);
     }
 }
 
@@ -1848,4 +2051,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initial dashboard load
     updateKPIs();
     renderDashboard();
+    initializeSmartNotifications();
 });
