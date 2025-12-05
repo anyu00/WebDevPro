@@ -957,9 +957,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.nav-link-btn, .sidebar-nav-btn').forEach(btn => btn.style.display = 'inline-block');
             document.querySelectorAll('.nav-group-divider').forEach(div => div.style.display = 'inline-block');
             
-            // Show first tab
-            const firstTab = document.getElementById('tab-manageCatalog');
-            if (firstTab) firstTab.style.display = 'block';
+            // Show ALL tabs in demo mode
+            document.querySelectorAll('.tab-section').forEach(tab => tab.style.display = 'block');
         }
 
         // Initialize app components
