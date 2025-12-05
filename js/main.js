@@ -237,24 +237,51 @@ function renderCatalogTablesAccordion() {
                 }).join('');
                 
                 const section = document.createElement('div');
+                section.className = 'catalog-section';
                 section.innerHTML = `
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#catTable${idx}" style="font-size:1.1rem;font-weight:600;color:#232946;margin-bottom:8px;">
-                        <i class='fa-solid fa-box'></i> ${catName}
-                    </button>
-                    <div class="collapse" id="catTable${idx}">
-                        <div style="overflow-x:auto;">
-                            <table class="glass-table excel-table" data-catalog="${catName}">
-                                <thead><tr>
-                                    <th>カタログ名</th><th>受領日</th><th>受領数量</th><th>納品日</th>
-                                    <th>発行数量</th><th>在庫数量</th><th>配布先</th><th>依頼者</th>
-                                    <th>備考</th><th>操作</th>
-                                </tr></thead>
-                                <tbody>${rowsHtml}</tbody>
-                            </table>
+                    <div class="catalog-header" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f0f4f8; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; margin-bottom: 12px; user-select: none;">
+                        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                            <i class="fas fa-chevron-down" style="transition: transform 0.2s; font-size: 14px; color: #64748b;"></i>
+                            <i class='fa-solid fa-box' style="color: #2563eb;"></i>
+                            <span style="font-weight: 600; color: #1e293b; font-size: 15px;">${catName}</span>
+                            <span style="margin-left: auto; color: #64748b; font-size: 13px;">(${sortedEntries.length} entries)</span>
                         </div>
                     </div>
+                    <div class="catalog-table-wrapper" style="display: none; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 16px;">
+                        <table class="glass-table excel-table" data-catalog="${catName}" style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: #f8fafc;">
+                                <tr>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">カタログ名</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">受領日</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">受領数量</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">納品日</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">発行数量</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">在庫数量</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">配布先</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">依頼者</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">備考</th>
+                                    <th style="padding: 12px 16px; text-align: center; font-size: 12px; font-weight: 700; color: #64748b; border-bottom: 2px solid #e2e8f0;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
                 `;
+                
                 container.appendChild(section);
+                
+                // Add click handler to header
+                const header = section.querySelector('.catalog-header');
+                const wrapper = section.querySelector('.catalog-table-wrapper');
+                const chevron = header.querySelector('.fa-chevron-down');
+                
+                header.addEventListener('click', () => {
+                    const isHidden = wrapper.style.display === 'none';
+                    wrapper.style.display = isHidden ? 'block' : 'none';
+                    chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
             });
         }
     });
@@ -276,31 +303,56 @@ function renderOrderTablesAccordion() {
             }
             
             Object.keys(catalogs).forEach((catName, idx) => {
+                const entries = catalogs[catName];
                 const section = document.createElement('div');
+                section.className = 'order-section';
                 section.innerHTML = `
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#orderTable${idx}" style="font-size:1.1rem;font-weight:600;color:#232946;margin-bottom:8px;">
-                        <i class='fa-solid fa-box'></i> ${catName}
-                    </button>
-                    <div class="collapse" id="orderTable${idx}">
-                        <div style="overflow-x:auto;">
-                            <table class="glass-table excel-order-table" data-catalog="${catName}">
-                                <thead><tr>
-                                    <th>カタログ名</th><th>注文数量</th><th>依頼者</th><th>メッセージ</th><th>操作</th>
-                                </tr></thead>
-                                <tbody>${catalogs[catName].map(entry => `
-                                    <tr data-key="${entry._key}">
-                                        <td class="editable-order" data-field="CatalogName">${entry.CatalogName}</td>
-                                        <td class="editable-order" data-field="OrderQuantity">${entry.OrderQuantity}</td>
-                                        <td class="editable-order" data-field="Requester">${entry.Requester}</td>
-                                        <td><div style='max-width:320px;overflow-x:auto;'>${entry.Message || ''}</div></td>
-                                        <td><button class="btn btn-danger btn-sm delete-order-row">Delete</button></td>
-                                    </tr>
-                                `).join('')}</tbody>
-                            </table>
+                    <div class="order-header" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; cursor: pointer; margin-bottom: 12px; user-select: none;">
+                        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                            <i class="fas fa-chevron-down" style="transition: transform 0.2s; font-size: 14px; color: #b45309;"></i>
+                            <i class='fa-solid fa-cart-shopping' style="color: #f59e0b;"></i>
+                            <span style="font-weight: 600; color: #1e293b; font-size: 15px;">${catName}</span>
+                            <span style="margin-left: auto; color: #64748b; font-size: 13px;">(${entries.length} orders)</span>
                         </div>
                     </div>
+                    <div class="order-table-wrapper" style="display: none; overflow-x: auto; border: 1px solid #fbbf24; border-radius: 8px; margin-bottom: 16px;">
+                        <table class="glass-table excel-order-table" data-catalog="${catName}" style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: #fffbeb;">
+                                <tr>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #92400e; border-bottom: 2px solid #fbbf24;">カタログ名</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #92400e; border-bottom: 2px solid #fbbf24;">注文数量</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #92400e; border-bottom: 2px solid #fbbf24;">依頼者</th>
+                                    <th style="padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 700; color: #92400e; border-bottom: 2px solid #fbbf24;">メッセージ</th>
+                                    <th style="padding: 12px 16px; text-align: center; font-size: 12px; font-weight: 700; color: #92400e; border-bottom: 2px solid #fbbf24;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${entries.map(entry => `
+                                    <tr data-key="${entry._key}" style="border-bottom: 1px solid #fef3c7;">
+                                        <td class="editable-order" data-field="CatalogName" style="padding: 12px 16px;">${entry.CatalogName}</td>
+                                        <td class="editable-order" data-field="OrderQuantity" style="padding: 12px 16px;">${entry.OrderQuantity}</td>
+                                        <td class="editable-order" data-field="Requester" style="padding: 12px 16px;">${entry.Requester}</td>
+                                        <td style="padding: 12px 16px;"><div style='max-width:320px;overflow-x:auto;'>${entry.Message || ''}</div></td>
+                                        <td style="padding: 12px 16px; text-align: center;"><button class="btn btn-danger btn-sm delete-order-row">Delete</button></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                 `;
+                
                 container.appendChild(section);
+                
+                // Add click handler to header
+                const header = section.querySelector('.order-header');
+                const wrapper = section.querySelector('.order-table-wrapper');
+                const chevron = header.querySelector('.fa-chevron-down');
+                
+                header.addEventListener('click', () => {
+                    const isHidden = wrapper.style.display === 'none';
+                    wrapper.style.display = isHidden ? 'block' : 'none';
+                    chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
             });
         }
     });
@@ -942,7 +994,7 @@ function setupLogoutHandler() {
                 } catch (error) {
                     console.error('Logout error:', error);
                     showNotification('Logout failed. Please try again.', 'error');
-                } 
+                }
             }
         });
     }
@@ -962,7 +1014,7 @@ function setupLogoutHandler() {
                 } 
             }
         });
-    }
+    }  
 }
 
 // ===== NOTIFICATION HELPER =====
