@@ -901,84 +901,53 @@ function initMobileToggle() {
 
 // ===== INITIALIZE ON DOM READY =====
 document.addEventListener('DOMContentLoaded', () => {
-    // Check authentication state before initializing app
-    onAuthStateChanged(async (user) => {
-        // Initialize app components regardless of auth state (allow demo mode)
-        
-        if (user) {
-            // Store current user globally
-            currentUser = user;
+    // Force demo mode for testing - show all tabs
+    console.log('🔧 FORCE DEMO MODE ENABLED');
+    
+    // Set demo user display
+    const userEmailInline = document.getElementById('userEmailInline');
+    const userEmail = document.getElementById('userEmail');
+    const userRole = document.getElementById('userRole');
+    const userRoleInline = document.getElementById('userRoleInline');
+    
+    if (userEmailInline) userEmailInline.textContent = 'demo@example.com';
+    if (userEmail) userEmail.textContent = 'demo@example.com';
+    if (userRole) userRole.textContent = 'Demo';
+    if (userRoleInline) userRoleInline.textContent = 'Demo';
+    
+    // Show all nav buttons
+    document.querySelectorAll('.nav-link-btn, .sidebar-nav-btn').forEach(btn => btn.style.display = 'inline-block');
+    document.querySelectorAll('.nav-group-divider').forEach(div => div.style.display = 'inline-block');
+    
+    // Show ALL tabs
+    document.querySelectorAll('.tab-section').forEach(tab => tab.style.display = 'block');
+    
+    // Initialize app components
+    initializeCatalogSelects();
+    initTabSwitching();
+    initCatalogForm();
+    initOrderForm();
+    initMobileToggle();
+    initAdminPanel();  
 
-            // Update last login timestamp
-            await updateLastLogin(user.uid);
-
-            // Fetch user permissions
-            userPermissions = await getUserPermissions(user.uid);
-
-            if (!userPermissions) {
-                console.error('Failed to load user permissions');
-                showNotification('Error loading permissions. Please refresh the page.', 'error');
-                return;
-            }
-
-            // Small delay to ensure permissions are fully loaded
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            // Initialize role-based navigation
-            const userRole = userPermissions.role || 'user';
-            initRoleBasedNavigation(userRole);
-
-            // Filter tabs based on permissions
-            await filterTabsByPermissions(userPermissions);
-
-            // Display user info
-            updateUserDisplay(user);
-
-            // Setup logout handler
-            setupLogoutHandler();
-
-            console.log('✓ Application initialized | User:', user.email);
-        } else {
-            // Demo mode for unauthenticated users
-            console.log('⚠ Demo mode: No user authenticated. Showing all tabs.');
-            
-            // Set demo user display
-            const userEmailInline = document.getElementById('userEmailInline');
-            const userEmail = document.getElementById('userEmail');
-            const userRole = document.getElementById('userRole');
-            const userRoleInline = document.getElementById('userRoleInline');
-            
-            if (userEmailInline) userEmailInline.textContent = 'demo@example.com';
-            if (userEmail) userEmail.textContent = 'demo@example.com';
-            if (userRole) userRole.textContent = 'Demo';
-            if (userRoleInline) userRoleInline.textContent = 'Demo';
-            
-            // Show all nav buttons in demo mode
-            document.querySelectorAll('.nav-link-btn, .sidebar-nav-btn').forEach(btn => btn.style.display = 'inline-block');
-            document.querySelectorAll('.nav-group-divider').forEach(div => div.style.display = 'inline-block');
-            
-            // Show ALL tabs in demo mode
-            document.querySelectorAll('.tab-section').forEach(tab => tab.style.display = 'block');
-        }
-
-        // Initialize app components
-        initializeCatalogSelects();
-        initTabSwitching();
-        initCatalogForm();
-        initOrderForm();
-        initMobileToggle();
-        initAdminPanel();  
-
-        console.log('✓ Application initialized');
-    });  
+    console.log('✓ Application initialized in DEMO MODE');
 });
 
 // ===== FILTER TABS BY PERMISSIONS =====
 async function filterTabsByPermissions(permissions) {
     console.log('Filtering tabs with permissions:', permissions);
     
-    // On GitHub Pages, always show all tabs for demo purposes
+    // On GitHub Pages OR for demo purposes, always show all tabs
     const isGitHubPages = window.location.hostname.includes('github.io');
+    const isDemoMode = !permissions || Object.keys(permissions).length === 0;
+    
+    if (isGitHubPages || isDemoMode) {
+        console.log('Demo/GitHub Pages detected - showing ALL tabs regardless of permissions');
+        document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
+            btn.style.display = 'block';
+        });
+        return;
+    }
     
     const tabConfig = {
         'manageCatalog': { label: 'Manage Catalog', permission: 'manageCatalog' },
