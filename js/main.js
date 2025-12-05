@@ -1087,49 +1087,56 @@ function exportToPDF(filename, title, tableData) {
 // ===== KPI CALCULATOR =====
 async function updateKPIs() {
     try {
-        const catalogRef = ref(db, 'catalogs');
+        const catalogRef = ref(db, 'ManageCatalog');
+        const entriesRef = ref(db, 'ManageCatalogEntries');
         const snapshot = await get(catalogRef);
+        const entriesSnapshot = await get(entriesRef);
         
-        if (!snapshot.exists()) {
-            document.getElementById('kpiTotalValue').textContent = '¥0';
-            document.getElementById('kpiTotalItems').textContent = '0';
-            document.getElementById('kpiLowStock').textContent = '0';
-            document.getElementById('kpiTopItem').textContent = '-';
-            return;
+        let totalCatalogs = 0;
+        let totalItems = 0;
+        let distributionMap = {};
+        let pendingCount = 0;
+        
+        // Count catalogs and total items in stock
+        if (snapshot.exists()) {
+            const catalogs = snapshot.val();
+            totalCatalogs = Object.keys(catalogs).length;
+            
+            for (const [key, catalog] of Object.entries(catalogs)) {
+                totalItems += parseInt(catalog.Stock || 0);
+            }
         }
         
-        const catalogs = snapshot.val();
-        let totalValue = 0;
-        let totalItems = 0;
-        let lowStockCount = 0;
-        let topItem = { name: '-', count: 0 };
-        
-        for (const [key, catalog] of Object.entries(catalogs)) {
-            const price = parseFloat(catalog.price) || 0;
-            const stock = parseInt(catalog.stock) || 0;
-            const reorderLevel = parseInt(catalog.reorderLevel) || 0;
+        // Count pending distributions and track most distributed
+        if (entriesSnapshot.exists()) {
+            const entries = entriesSnapshot.val();
             
-            totalValue += price * stock;
-            totalItems += stock;
-            
-            if (stock < reorderLevel && reorderLevel > 0) {
-                lowStockCount++;
-                if (stock === 0) {
-                    window.showToast(`⚠️ Out of stock: ${catalog.name}`, 'warning');
-                } else {
-                    window.showToast(`📉 Low stock alert: ${catalog.name} (${stock} left)`, 'warning');
+            for (const [key, entry] of Object.entries(entries)) {
+                const catalogName = entry.CatalogName || 'Unknown';
+                distributionMap[catalogName] = (distributionMap[catalogName] || 0) + (parseInt(entry.IssueQuantity) || 0);
+                
+                // Count as pending if delivery date is in future
+                const deliveryDate = new Date(entry.DeliveryDate);
+                if (deliveryDate > new Date()) {
+                    pendingCount++;
                 }
             }
-            
-            if (stock > topItem.count) {
-                topItem = { name: catalog.name?.substring(0, 30), count: stock };
+        }
+        
+        // Find most distributed catalog
+        let mostDist = '-';
+        let maxCount = 0;
+        for (const [name, count] of Object.entries(distributionMap)) {
+            if (count > maxCount) {
+                maxCount = count;
+                mostDist = name.substring(0, 20);
             }
         }
         
-        document.getElementById('kpiTotalValue').textContent = `¥${totalValue.toLocaleString('ja-JP')}`;
+        document.getElementById('kpiTotalCatalogs').textContent = totalCatalogs;
         document.getElementById('kpiTotalItems').textContent = totalItems;
-        document.getElementById('kpiLowStock').textContent = lowStockCount;
-        document.getElementById('kpiTopItem').textContent = topItem.name;
+        document.getElementById('kpiPendingDist').textContent = pendingCount;
+        document.getElementById('kpiMostDist').textContent = mostDist;
     } catch (error) {
         console.error('Error updating KPIs:', error);
     }
