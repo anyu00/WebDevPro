@@ -40,6 +40,61 @@ function initializeCatalogSelects() {
     });
 }
 
+// ===== ROLE-BASED NAVIGATION =====
+function initRoleBasedNavigation(userRole) {
+    // Hide/show nav groups based on user role
+    const isAdmin = userRole === 'admin';
+    const isManager = userRole === 'manager';
+    const isUser = userRole === 'user';
+    
+    // Inventory group - only for admin/manager
+    document.querySelectorAll('.nav-group-inventory').forEach(btn => {
+        btn.style.display = (isAdmin || isManager) ? 'inline-block' : 'none';
+    });
+    
+    // Management group - only for admin
+    document.querySelectorAll('.nav-group-management').forEach(btn => {
+        btn.style.display = isAdmin ? 'inline-block' : 'none';
+    });
+    
+    // Ordering group - visible to all
+    document.querySelectorAll('.nav-group-ordering').forEach(btn => {
+        btn.style.display = 'inline-block';
+    });
+    
+    // Dashboard - visible to all
+    document.querySelectorAll('.nav-group-dashboard').forEach(btn => {
+        btn.style.display = 'inline-block';
+    });
+    
+    // Analytics - only for admin
+    document.querySelectorAll('.nav-group-analytics').forEach(btn => {
+        btn.style.display = isAdmin ? 'inline-block' : 'none';
+    });
+    
+    // Hide dividers if all buttons in adjacent groups are hidden
+    const dividers = document.querySelectorAll('.nav-group-divider');
+    dividers.forEach((divider, index) => {
+        // Show divider if both adjacent groups have visible buttons
+        let prevVisible = false;
+        let nextVisible = false;
+        
+        // Check buttons before this divider
+        const beforeDivider = divider.previousElementSibling;
+        if (beforeDivider && beforeDivider.style.display !== 'none') {
+            prevVisible = true;
+        }
+        
+        // Check buttons after this divider
+        const afterDivider = divider.nextElementSibling;
+        if (afterDivider && afterDivider.style.display !== 'none') {
+            nextVisible = true;
+        }
+        
+        divider.style.display = (prevVisible && nextVisible) ? 'inline-block' : 'none';
+    });
+}
+
 // ===== TAB SWITCHING =====
 function initTabSwitching() {
     document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
@@ -872,6 +927,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Small delay to ensure permissions are fully loaded
         await new Promise(resolve => setTimeout(resolve, 100));
 
+        // Initialize role-based navigation
+        const userRole = userPermissions.role || 'user';
+        initRoleBasedNavigation(userRole);
+
         // Filter tabs based on permissions
         await filterTabsByPermissions(userPermissions);
 
@@ -1307,9 +1366,18 @@ function switchTab(event, tabName) {
         }
     }
     
-    // Update active states
+    // Update active states for all nav buttons
     document.querySelectorAll('.nav-link-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(b => b.classList.add('active'));
+    document.querySelectorAll('[data-tab="' + tabName + '"]').forEach(b => b.classList.add('active'));
+    
+    // Also update sidebar buttons if visible
+    document.querySelectorAll('.sidebar-nav-btn').forEach(b => {
+        if (b.getAttribute('data-tab') === tabName) {
+            b.classList.add('active');
+        } else {
+            b.classList.remove('active');
+        }
+    });
 }
 
 // ===== PERIODIC KPI UPDATE =====

@@ -60,15 +60,30 @@
             <div style="display:flex; align-items:center; gap:24px; width:100%; justify-content:space-between;">
                 <div style="display:flex; align-items:center; gap:16px;">
                     <div style="font-weight:700; color:#2563eb;">📦 CatalogPro</div>
-                    <div style="display:flex; gap:8px;">
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="manageCatalog">Dashboard</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="catalogEntries">Inventory</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="orderEntries">Orders</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="stockCalendar">Calendar</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="auditLog">Audit Log</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="movementHistory">Movement</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="analytics">Analytics</button>
-                        <button class="nav-link-btn sidebar-nav-btn" data-tab="adminPanel">Settings</button>
+                    <div style="display:flex; gap:2px; flex-wrap: wrap;">
+                        <!-- DASHBOARD GROUP -->
+                        <button class="nav-link-btn nav-group-dashboard" data-tab="manageCatalog" title="Dashboard">Dashboard</button>
+                        
+                        <!-- INVENTORY GROUP (Admin/Manager only) -->
+                        <span class="nav-group-divider"></span>
+                        <button class="nav-link-btn nav-group-inventory" data-tab="catalogEntries" title="Manage Inventory">📦 Inventory</button>
+                        <button class="nav-link-btn nav-group-inventory" data-tab="addCatalog" title="Add New Entry">Add Entry</button>
+                        
+                        <!-- ORDERING GROUP -->
+                        <span class="nav-group-divider"></span>
+                        <button class="nav-link-btn nav-group-ordering" data-tab="orderEntries" title="View Orders">Orders</button>
+                        <button class="nav-link-btn nav-group-ordering" data-tab="placeOrder" title="Create New Order">+ Order</button>
+                        
+                        <!-- MANAGEMENT GROUP (Admin only) -->
+                        <span class="nav-group-divider"></span>
+                        <button class="nav-link-btn nav-group-management" data-tab="auditLog" title="Audit Log">Audit</button>
+                        <button class="nav-link-btn nav-group-management" data-tab="movementHistory" title="Stock History">History</button>
+                        <button class="nav-link-btn nav-group-management" data-tab="stockCalendar" title="Calendar">📅 Calendar</button>
+                        <button class="nav-link-btn nav-group-management" data-tab="adminPanel" title="Admin Settings">⚙️ Admin</button>
+                        
+                        <!-- ANALYTICS GROUP -->
+                        <span class="nav-group-divider"></span>
+                        <button class="nav-link-btn nav-group-analytics" data-tab="analytics" title="Analytics & Reports">📊 Analytics</button>
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:12px;">

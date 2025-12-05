@@ -562,6 +562,57 @@ body {
     transform: translateY(-2px);
 }
 
+/* Navigation Group Styling */
+.nav-group-divider {
+    display: inline-block;
+    width: 1px;
+    height: 24px;
+    background-color: #d1d5db;
+    margin: 0 4px;
+    opacity: 0.5;
+}
+
+/* Navigation Group Colors */
+.nav-group-dashboard {
+    color: #2563eb;
+}
+
+.nav-group-dashboard:hover {
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.nav-group-inventory {
+    color: #7c3aed;
+}
+
+.nav-group-inventory:hover {
+    background-color: rgba(124, 58, 237, 0.1);
+}
+
+.nav-group-ordering {
+    color: #059669;
+}
+
+.nav-group-ordering:hover {
+    background-color: rgba(5, 150, 105, 0.1);
+}
+
+.nav-group-management {
+    color: #d97706;
+}
+
+.nav-group-management:hover {
+    background-color: rgba(217, 119, 6, 0.1);
+}
+
+.nav-group-analytics {
+    color: #dc2626;
+}
+
+.nav-group-analytics:hover {
+    background-color: rgba(220, 38, 38, 0.1);
+}
+
 /* Activity Feed Styling */
 .activity-feed-item {
     display: flex;
