@@ -499,11 +499,7 @@ body {
 /* Desktop: Prefer top navigation, hide sidebar */
 @media (min-width: 901px) {
     .sidebar {
-        position: static !important;
-        left: 0 !important;
-        display: flex !important;
-        height: auto;
-        width: 240px;
+        display: none !important;
     }
     .glass-topbar {
         justify-content: space-between;
