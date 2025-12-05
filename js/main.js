@@ -1201,6 +1201,164 @@ async function updateKPIs() {
     }
 }
 
+// ===== PRODUCT BROWSING & ORDERING =====
+async function renderProductBrowser() {
+    try {
+        const catalogRef = ref(db, 'ManageCatalog');
+        const entriesRef = ref(db, 'ManageCatalogEntries');
+        
+        const catalogSnapshot = await get(catalogRef);
+        const entriesSnapshot = await get(entriesRef);
+        
+        // Build product list from entries
+        const products = [];
+        const catalogMap = {};
+        
+        if (catalogSnapshot.exists()) {
+            Object.entries(catalogSnapshot.val()).forEach(([key, catalog]) => {
+                catalogMap[catalog.CatalogName] = catalog;
+            });
+        }
+        
+        if (entriesSnapshot.exists()) {
+            Object.entries(entriesSnapshot.val()).forEach(([key, entry]) => {
+                const catalogName = entry.CatalogName;
+                const stock = parseInt(entry.StockQuantity || 0);
+                
+                products.push({
+                    id: key,
+                    name: catalogName,
+                    catalog: catalogName,
+                    stock: stock,
+                    status: stock === 0 ? 'out' : stock < 10 ? 'low' : 'available',
+                    receiptDate: entry.ReceiptDate,
+                    deliveryDate: entry.DeliveryDate
+                });
+            });
+        }
+        
+        // Populate filter dropdowns
+        const catalogFilterSelect = document.getElementById('productFilterCatalog');
+        const catalogs = [...new Set(products.map(p => p.catalog))];
+        catalogs.forEach(catalog => {
+            const option = document.createElement('option');
+            option.value = catalog;
+            option.textContent = catalog;
+            catalogFilterSelect.appendChild(option);
+        });
+        
+        // Render products
+        renderProductGrid(products, products);
+        
+        // Setup filter handlers
+        setupProductFilters(products);
+        
+    } catch (error) {
+        console.error('Error rendering product browser:', error);
+        document.getElementById('productsGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 32px; color: #999;">Error loading products</div>';
+    }
+}
+
+function renderProductGrid(allProducts, filteredProducts) {
+    const grid = document.getElementById('productsGrid');
+    
+    if (filteredProducts.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 32px; color: #999;">No products found</div>';
+        return;
+    }
+    
+    let html = '';
+    filteredProducts.forEach(product => {
+        const statusClass = product.status;
+        const statusLabel = {
+            'available': '✅ In Stock',
+            'low': '⚠️ Low Stock',
+            'out': '❌ Out of Stock'
+        }[product.status] || 'Unknown';
+        
+        html += `
+            <div class="product-card">
+                <div class="product-card-header">${product.name.substring(0, 25)}...</div>
+                <div class="product-card-body">
+                    <div class="product-card-status ${statusClass}">${statusLabel}</div>
+                    <div class="product-card-info">
+                        <span>Stock:</span>
+                        <strong>${product.stock} units</strong>
+                    </div>
+                    <div class="product-card-info">
+                        <span>Delivery:</span>
+                        <strong>${product.deliveryDate || '-'}</strong>
+                    </div>
+                    <div class="product-card-actions">
+                        <button class="btn btn-info" onclick="addProductToOrder('${product.name}', ${product.stock})">Add to Order</button>
+                        <button class="btn btn-outline-secondary" onclick="viewProductDetails('${product.id}')">Details</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    grid.innerHTML = html;
+}
+
+function setupProductFilters(allProducts) {
+    const searchBox = document.getElementById('productSearchBox');
+    const catalogFilter = document.getElementById('productFilterCatalog');
+    const statusFilter = document.getElementById('productFilterStatus');
+    const clearBtn = document.getElementById('clearFiltersBtn');
+    
+    function applyFilters() {
+        let filtered = allProducts;
+        
+        // Search filter
+        const searchTerm = searchBox.value.toLowerCase();
+        if (searchTerm) {
+            filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
+        }
+        
+        // Catalog filter
+        const catalogValue = catalogFilter.value;
+        if (catalogValue) {
+            filtered = filtered.filter(p => p.catalog === catalogValue);
+        }
+        
+        // Status filter
+        const statusValue = statusFilter.value;
+        if (statusValue) {
+            filtered = filtered.filter(p => p.status === statusValue);
+        }
+        
+        renderProductGrid(allProducts, filtered);
+    }
+    
+    searchBox.addEventListener('input', applyFilters);
+    catalogFilter.addEventListener('change', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+    clearBtn.addEventListener('click', () => {
+        searchBox.value = '';
+        catalogFilter.value = '';
+        statusFilter.value = '';
+        renderProductGrid(allProducts, allProducts);
+    });
+}
+
+function addProductToOrder(catalogName, availableStock) {
+    const quantityInput = document.getElementById('QuickOrderQuantity');
+    const catalogSelect = document.getElementById('QuickOrderCatalog');
+    
+    catalogSelect.value = catalogName;
+    quantityInput.value = 1;
+    quantityInput.max = Math.max(1, availableStock);
+    
+    // Scroll to quick order section
+    document.getElementById('quickOrderForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+function viewProductDetails(productId) {
+    // Could expand to show more details in a modal
+    window.showToast('📌 Product ID: ' + productId, 'info');
+}
+
 // ===== DASHBOARD RENDERER =====
 async function renderDashboard() {
     try {
@@ -1360,6 +1518,7 @@ function switchTab(event, tabName) {
         // Lazy load if needed
         if (tabName === 'catalogEntries') renderCatalogTablesAccordion();
         if (tabName === 'orderEntries') renderOrderTablesAccordion();
+        if (tabName === 'placeOrder') renderProductBrowser();
         if (tabName === 'stockCalendar' && !window.calendarInitialized) {
             initializeCalendar();
             window.calendarInitialized = true;
