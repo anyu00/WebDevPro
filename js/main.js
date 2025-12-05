@@ -1142,7 +1142,178 @@ async function updateKPIs() {
     }
 }
 
-// ===== AUDIT LOG =====
+// ===== DASHBOARD RENDERER =====
+async function renderDashboard() {
+    try {
+        // Update dashboard summary stats
+        const catalogRef = ref(db, 'ManageCatalog');
+        const entriesRef = ref(db, 'ManageCatalogEntries');
+        
+        const catalogSnapshot = await get(catalogRef);
+        const entriesSnapshot = await get(entriesRef);
+        
+        let totalRecords = 0;
+        let completedRecords = 0;
+        
+        if (entriesSnapshot.exists()) {
+            const entries = entriesSnapshot.val();
+            totalRecords = Object.keys(entries).length;
+            
+            // Count completed (where DeliveryDate has passed)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            for (const [key, entry] of Object.entries(entries)) {
+                const deliveryDate = new Date(entry.DeliveryDate);
+                if (deliveryDate < today) {
+                    completedRecords++;
+                }
+            }
+        }
+        
+        const completionRate = totalRecords > 0 ? Math.round((completedRecords / totalRecords) * 100) : 0;
+        
+        document.getElementById('dashTotalRecords').textContent = totalRecords;
+        document.getElementById('dashCompleted').textContent = completedRecords;
+        document.getElementById('dashCompletionRate').textContent = completionRate + '%';
+        
+        // Render activity feed
+        await renderActivityFeed();
+        
+    } catch (error) {
+        console.error('Error rendering dashboard:', error);
+    }
+}
+
+async function renderActivityFeed() {
+    try {
+        const auditRef = ref(db, 'AuditLog');
+        const snapshot = await get(auditRef);
+        const container = document.getElementById('activityFeed');
+        
+        if (!snapshot.exists()) {
+            container.innerHTML = '<div class="activity-feed-empty">No activities yet</div>';
+            return;
+        }
+        
+        const activities = snapshot.val();
+        const activityArray = [];
+        
+        for (const [key, activity] of Object.entries(activities)) {
+            activityArray.push({
+                timestamp: activity.timestamp,
+                action: activity.action,
+                details: activity.details,
+                userId: activity.userId
+            });
+        }
+        
+        // Sort by timestamp descending and take last 15
+        activityArray.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        const recentActivities = activityArray.slice(0, 15);
+        
+        if (recentActivities.length === 0) {
+            container.innerHTML = '<div class="activity-feed-empty">No recent activities</div>';
+            return;
+        }
+        
+        let html = '';
+        recentActivities.forEach(activity => {
+            const timestamp = new Date(activity.timestamp);
+            const timeAgo = getTimeAgo(timestamp);
+            const icon = getActivityIcon(activity.action);
+            const displayAction = formatActivityAction(activity.action);
+            
+            html += `
+                <div class="activity-feed-item">
+                    <div class="activity-feed-icon">${icon}</div>
+                    <div class="activity-feed-content">
+                        <div class="activity-feed-action">${displayAction}</div>
+                        <div class="activity-feed-details">${activity.details || activity.userId || 'Unknown'}</div>
+                    </div>
+                    <div class="activity-feed-time">${timeAgo}</div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error rendering activity feed:', error);
+        document.getElementById('activityFeed').innerHTML = '<div class="activity-feed-empty">Error loading activities</div>';
+    }
+}
+
+function getActivityIcon(action) {
+    const icons = {
+        'CREATE': '✅',
+        'UPDATE': '✏️',
+        'DELETE': '🗑️',
+        'LOGOUT': '👋',
+        'LOGIN': '🔐',
+        'APPROVE': '✔️',
+        'REJECT': '❌',
+        'EXPORT': '📥',
+        'IMPORT': '📤'
+    };
+    return icons[action] || '📌';
+}
+
+function formatActivityAction(action) {
+    const actionMap = {
+        'CREATE': 'Created Entry',
+        'UPDATE': 'Updated Entry',
+        'DELETE': 'Deleted Entry',
+        'LOGOUT': 'Logged Out',
+        'LOGIN': 'Logged In',
+        'APPROVE': 'Approved',
+        'REJECT': 'Rejected',
+        'EXPORT': 'Exported Data',
+        'IMPORT': 'Imported Data'
+    };
+    return actionMap[action] || action;
+}
+
+function getTimeAgo(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return diffMins + 'm ago';
+    if (diffHours < 24) return diffHours + 'h ago';
+    if (diffDays < 7) return diffDays + 'd ago';
+    
+    return date.toLocaleDateString();
+}
+
+// Helper function to switch tabs from dashboard buttons
+function switchTab(event, tabName) {
+    if (event) event.preventDefault();
+    
+    document.querySelectorAll('.tab-section').forEach(tab => tab.style.display = 'none');
+    const tab = document.getElementById('tab-' + tabName);
+    if (tab) {
+        tab.style.display = 'block';
+        
+        // Lazy load if needed
+        if (tabName === 'catalogEntries') renderCatalogTablesAccordion();
+        if (tabName === 'orderEntries') renderOrderTablesAccordion();
+        if (tabName === 'stockCalendar' && !window.calendarInitialized) {
+            initializeCalendar();
+            window.calendarInitialized = true;
+        }
+    }
+    
+    // Update active states
+    document.querySelectorAll('.nav-link-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(b => b.classList.add('active'));
+}
+
+// ===== PERIODIC KPI UPDATE =====
+setInterval(updateKPIs, 30000); // Update every 30 seconds
 async function logAuditEvent(action, details, userId = 'unknown') {
     try {
         const timestamp = new Date().toISOString();
@@ -1423,6 +1594,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (bulkEditBtn) {
         bulkEditBtn.addEventListener('click', openBulkEditModal);
     }
+
+    // Wire dashboard actions
+    const dashboardButtons = document.querySelectorAll('.dashboard-action-btn');
+    dashboardButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            switchTab(null, tabName);
+        });
+    });
     
     // Wire tab click events for audit log and movement history
     document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
@@ -1432,7 +1612,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setTimeout(renderAuditLog, 100);
             } else if (tab === 'movementHistory') {
                 setTimeout(renderMovementHistory, 100);
+            } else if (tab === 'manageCatalog') {
+                setTimeout(renderDashboard, 100);
             }
         });
     });
+
+    // Initial dashboard load
+    updateKPIs();
+    renderDashboard();
 });

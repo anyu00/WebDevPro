@@ -88,30 +88,123 @@
         
         <div class="glass-main-content">
             <div class="glass-cards">
-                <!-- TAB: Catalog Management -->
+                <!-- TAB: Dashboard (Professional) -->
                 <div class="glass-card tab-section" id="tab-manageCatalog">
-                    <h2>カタログの管理</h2>
+                    <h2 style="margin-bottom: 24px;">📊 Dashboard</h2>
                     
-                    <!-- KPI Cards -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                        <div style="background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px;">
-                            <div style="font-size: 12px; color: #0369a1; font-weight: 600; margin-bottom: 4px;">TOTAL CATALOGS</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #1e293b;" id="kpiTotalCatalogs">0</div>
-                        </div>
-                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px;">
-                            <div style="font-size: 12px; color: #16a34a; font-weight: 600; margin-bottom: 4px;">TOTAL ITEMS IN STOCK</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #1e293b;" id="kpiTotalItems">0</div>
-                        </div>
-                        <div style="background: #fef3c7; border: 1px solid #fde047; border-radius: 8px; padding: 16px;">
-                            <div style="font-size: 12px; color: #b45309; font-weight: 600; margin-bottom: 4px;">PENDING DISTRIBUTIONS</div>
-                            <div style="font-size: 24px; font-weight: 700; color: #d97706;" id="kpiPendingDist">0</div>
-                        </div>
-                        <div style="background: #fce7f3; border: 1px solid #fbcfe8; border-radius: 8px; padding: 16px;">
-                            <div style="font-size: 12px; color: #be185d; font-weight: 600; margin-bottom: 4px;">MOST DISTRIBUTED</div>
-                            <div style="font-size: 16px; font-weight: 700; color: #1e293b;" id="kpiMostDist">-</div>
+                    <!-- KPI Cards Section -->
+                    <div style="margin-bottom: 32px;">
+                        <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Key Performance Indicators</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                            <!-- KPI Card 1: Total Catalogs -->
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Total Catalogs</div>
+                                        <div style="font-size: 32px; font-weight: 700;" id="kpiTotalCatalogs">0</div>
+                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">Active catalogs</div>
+                                    </div>
+                                    <div style="font-size: 40px; opacity: 0.3;">📦</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI Card 2: Total Items -->
+                            <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(245, 87, 108, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Items in Stock</div>
+                                        <div style="font-size: 32px; font-weight: 700;" id="kpiTotalItems">0</div>
+                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">Total units</div>
+                                    </div>
+                                    <div style="font-size: 40px; opacity: 0.3;">📈</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI Card 3: Pending Distributions -->
+                            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Pending</div>
+                                        <div style="font-size: 32px; font-weight: 700;" id="kpiPendingDist">0</div>
+                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">Awaiting delivery</div>
+                                    </div>
+                                    <div style="font-size: 40px; opacity: 0.3;">⏳</div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPI Card 4: Most Distributed -->
+                            <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; padding: 20px; color: #333; box-shadow: 0 4px 12px rgba(250, 112, 154, 0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <div>
+                                        <div style="font-size: 13px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Most Distributed</div>
+                                        <div style="font-size: 18px; font-weight: 700;" id="kpiMostDist">-</div>
+                                        <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">Top catalog</div>
+                                    </div>
+                                    <div style="font-size: 40px; opacity: 0.3;">⭐</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Dashboard Content: Two-Column Layout -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                        <!-- Left Column: Quick Actions -->
+                        <div>
+                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Quick Actions</h4>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                                <button class="dashboard-action-btn" data-tab="manageCatalog" onclick="switchTab(event, 'manageCatalog')" style="background: #f0f9ff; border: 2px solid #bfdbfe; color: #0369a1; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <div style="font-size: 20px; margin-bottom: 4px;">➕</div>
+                                    <div>Add Catalog</div>
+                                </button>
+                                <button class="dashboard-action-btn" data-tab="placeOrder" onclick="switchTab(event, 'placeOrder')" style="background: #f0fdf4; border: 2px solid #bbf7d0; color: #16a34a; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <div style="font-size: 20px; margin-bottom: 4px;">📋</div>
+                                    <div>New Order</div>
+                                </button>
+                                <button class="dashboard-action-btn" data-tab="catalogEntries" onclick="switchTab(event, 'catalogEntries')" style="background: #fef3c7; border: 2px solid #fde047; color: #b45309; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <div style="font-size: 20px; margin-bottom: 4px;">📦</div>
+                                    <div>View Inventory</div>
+                                </button>
+                                <button class="dashboard-action-btn" data-tab="orderEntries" onclick="switchTab(event, 'orderEntries')" style="background: #fce7f3; border: 2px solid #fbcfe8; color: #be185d; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                    <div style="font-size: 20px; margin-bottom: 4px;">📊</div>
+                                    <div>View Orders</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Summary Stats -->
+                        <div>
+                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Summary</h4>
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #666;">Total Records</span>
+                                    <span style="font-weight: 600;" id="dashTotalRecords">0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
+                                    <span style="color: #666;">Completed</span>
+                                    <span style="font-weight: 600;" id="dashCompleted">0</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                                    <span style="color: #666;">Completion Rate</span>
+                                    <span style="font-weight: 600;" id="dashCompletionRate">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Feed -->
+                    <hr style="margin: 32px 0;">
+                    <div>
+                        <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Recent Activity</h4>
+                        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 400px; overflow-y: auto;" id="activityFeed">
+                            <div style="padding: 16px; text-align: center; color: #999;">Loading recent activities...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!-- TAB: Manage Catalog (Separate from Dashboard) -->
+                <div class="glass-card tab-section" id="tab-addCatalog" style="display:none;">
+                    <h2>➕ Add Catalog Entry</h2>
                     <form id="catalogEntryForm">
                         <div class="form-row">
                             <div class="form-group">
@@ -156,7 +249,6 @@
                     <div class="message text-center" id="message"></div>
                 </div>
                 
-                <!-- TAB: Place Order -->
                 <div class="glass-card tab-section" id="tab-placeOrder" style="display:none;">
                     <h2>注文する</h2>
                     <form id="orderForm">
