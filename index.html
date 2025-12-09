@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="legitimate-business-application">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>カタログ管理ダッシュボード</title>
+    <title>繧ｫ繧ｿ繝ｭ繧ｰ邂｡逅・ム繝・す繝･繝懊・繝・/title>
     
     <!-- External Fonts & Icon Libraries -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
@@ -23,11 +23,11 @@
 <body>
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <div class="sidebar-title">カタログ管理</div>
+        <div class="sidebar-title">繧ｫ繧ｿ繝ｭ繧ｰ邂｡逅・/div>
         
         <!-- User Profile Section -->
         <div class="sidebar-user-profile">
-            <div class="user-avatar">👤</div>
+            <div class="user-avatar">側</div>
             <div class="user-info">
                 <div class="user-email" id="userEmail">Loading...</div>
                 <div class="user-role" id="userRole">...</div>
@@ -35,15 +35,15 @@
         </div>
         
         <div class="sidebar-nav">
-            <button class="sidebar-nav-btn active" data-tab="manageCatalog"><i class="fa-solid fa-box"></i> カタログ管理</button>
-            <button class="sidebar-nav-btn" data-tab="placeOrder"><i class="fa-solid fa-cart-plus"></i> 注文する</button>
-            <button class="sidebar-nav-btn" data-tab="catalogEntries"><i class="fa-solid fa-list"></i> カタログエントリ</button>
-            <button class="sidebar-nav-btn" data-tab="orderEntries"><i class="fa-solid fa-file-invoice"></i> 注文エントリ</button>
-            <button class="sidebar-nav-btn" data-tab="stockCalendar"><i class="fa-solid fa-calendar"></i> カレンダー</button>
-            <button class="sidebar-nav-btn" data-tab="movementHistory"><i class="fa-solid fa-history"></i> 推移履歴</button>
-            <button class="sidebar-nav-btn" data-tab="auditLog"><i class="fa-solid fa-clipboard"></i> 監査ログ</button>
-            <button class="sidebar-nav-btn" data-tab="analytics"><i class="fa-solid fa-chart-pie"></i> アナリティクス</button>
-            <button class="sidebar-nav-btn" data-tab="adminPanel"><i class="fa-solid fa-user-shield"></i> 管理者パネル</button>
+            <button class="sidebar-nav-btn active" data-tab="manageCatalog"><i class="fa-solid fa-box"></i> 繧ｫ繧ｿ繝ｭ繧ｰ邂｡逅・/button>
+            <button class="sidebar-nav-btn" data-tab="placeOrder"><i class="fa-solid fa-cart-plus"></i> 豕ｨ譁・☆繧・/button>
+            <button class="sidebar-nav-btn" data-tab="catalogEntries"><i class="fa-solid fa-list"></i> 繧ｫ繧ｿ繝ｭ繧ｰ繧ｨ繝ｳ繝医Μ</button>
+            <button class="sidebar-nav-btn" data-tab="orderEntries"><i class="fa-solid fa-file-invoice"></i> 豕ｨ譁・お繝ｳ繝医Μ</button>
+            <button class="sidebar-nav-btn" data-tab="stockCalendar"><i class="fa-solid fa-calendar"></i> 繧ｫ繝ｬ繝ｳ繝繝ｼ</button>
+            <button class="sidebar-nav-btn" data-tab="movementHistory"><i class="fa-solid fa-history"></i> 謗ｨ遘ｻ螻･豁ｴ</button>
+            <button class="sidebar-nav-btn" data-tab="auditLog"><i class="fa-solid fa-clipboard"></i> 逶｣譟ｻ繝ｭ繧ｰ</button>
+            <button class="sidebar-nav-btn" data-tab="analytics"><i class="fa-solid fa-chart-pie"></i> 繧｢繝翫Μ繝・ぅ繧ｯ繧ｹ</button>
+            <button class="sidebar-nav-btn" data-tab="adminPanel"><i class="fa-solid fa-user-shield"></i> 邂｡逅・・ヱ繝阪Ν</button>
         </div>
         <div class="sidebar-actions">
             <button class="icon-btn" title="Logout" id="logoutBtn"><i class="fa-solid fa-sign-out-alt"></i></button>
@@ -59,39 +59,21 @@
         <div class="glass-topbar">
             <div style="display:flex; align-items:center; gap:24px; width:100%; justify-content:space-between;">
                 <div style="display:flex; align-items:center; gap:16px;">
-                    <div style="font-weight:700; color:#2563eb;">📦 CatalogPro</div>
-                    <div style="display:flex; gap:2px; flex-wrap: wrap;">
-                        <!-- DASHBOARD GROUP -->
-                        <button class="nav-link-btn nav-group-dashboard" data-tab="manageCatalog" title="Dashboard">Dashboard</button>
-                        
-                        <!-- INVENTORY GROUP (Admin/Manager only) -->
-                        <span class="nav-group-divider"></span>
-                        <button class="nav-link-btn nav-group-inventory" data-tab="catalogEntries" title="Manage Inventory">📦 Inventory</button>
-                        <button class="nav-link-btn nav-group-inventory" data-tab="addCatalog" title="Add New Entry">Add Entry</button>
-                        
-                        <!-- ORDERING GROUP -->
-                        <span class="nav-group-divider"></span>
-                        <button class="nav-link-btn nav-group-ordering" data-tab="orderEntries" title="View Orders">Orders</button>
-                        <button class="nav-link-btn nav-group-ordering" data-tab="placeOrder" title="Create New Order">+ Order</button>
-                        
-                        <!-- MANAGEMENT GROUP (Admin only) -->
-                        <span class="nav-group-divider"></span>
-                        <button class="nav-link-btn nav-group-management" data-tab="auditLog" title="Audit Log">Audit</button>
-                        <button class="nav-link-btn nav-group-management" data-tab="movementHistory" title="Stock History">History</button>
-                        <button class="nav-link-btn nav-group-management" data-tab="stockCalendar" title="Calendar">📅 Calendar</button>
-                        <button class="nav-link-btn nav-group-management" data-tab="adminPanel" title="Admin Settings">⚙️ Admin</button>
-                        
-                        <!-- ANALYTICS GROUP -->
-                        <span class="nav-group-divider"></span>
-                        <button class="nav-link-btn nav-group-analytics" data-tab="analytics" title="Analytics & Reports">📊 Analytics</button>
+                    <div style="font-weight:700; color:#2563eb;">逃 CatalogPro</div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="manageCatalog">Dashboard</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="catalogEntries">Inventory</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="orderEntries">Orders</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="stockCalendar">Calendar</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="auditLog">Audit Log</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="movementHistory">Movement</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="analytics">Analytics</button>
+                        <button class="nav-link-btn sidebar-nav-btn" data-tab="adminPanel">Settings</button>
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:12px;">
                     <input type="text" class="search-box" placeholder="Search..." style="background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; width:240px; font-size:14px;">
-                    <button class="icon-btn" title="Notifications" id="notificationBtn" style="position: relative;">
-                        <i class="fas fa-bell"></i>
-                        <span id="notificationBadge" style="position: absolute; top: -6px; right: -6px; background: #dc2626; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 10px; display: none; align-items: center; justify-content: center; font-weight: 600;">0</span>
-                    </button>
+                    <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
                     <div class="user-display">
                         <div class="user-info-inline">
                             <div class="user-email-inline" id="userEmailInline">Loading...</div>
@@ -106,181 +88,66 @@
         
         <div class="glass-main-content">
             <div class="glass-cards">
-                <!-- TAB: Dashboard (Professional) -->
+                <!-- TAB: Catalog Management -->
                 <div class="glass-card tab-section" id="tab-manageCatalog">
-                    <h2 style="margin-bottom: 24px;">📊 Dashboard</h2>
+                    <h2>繧ｫ繧ｿ繝ｭ繧ｰ縺ｮ邂｡逅・/h2>
                     
-                    <!-- KPI Cards Section -->
-                    <div style="margin-bottom: 32px;">
-                        <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Key Performance Indicators</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-                            <!-- KPI Card 1: Total Catalogs -->
-                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Total Catalogs</div>
-                                        <div style="font-size: 32px; font-weight: 700;" id="kpiTotalCatalogs">0</div>
-                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">Active catalogs</div>
-                                    </div>
-                                    <div style="font-size: 40px; opacity: 0.3;">📦</div>
-                                </div>
-                            </div>
-                            
-                            <!-- KPI Card 2: Total Items -->
-                            <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(245, 87, 108, 0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Items in Stock</div>
-                                        <div style="font-size: 32px; font-weight: 700;" id="kpiTotalItems">0</div>
-                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">Total units</div>
-                                    </div>
-                                    <div style="font-size: 40px; opacity: 0.3;">📈</div>
-                                </div>
-                            </div>
-                            
-                            <!-- KPI Card 3: Pending Distributions -->
-                            <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 12px; padding: 20px; color: white; box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Pending</div>
-                                        <div style="font-size: 32px; font-weight: 700;" id="kpiPendingDist">0</div>
-                                        <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">Awaiting delivery</div>
-                                    </div>
-                                    <div style="font-size: 40px; opacity: 0.3;">⏳</div>
-                                </div>
-                            </div>
-                            
-                            <!-- KPI Card 4: Most Distributed -->
-                            <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; padding: 20px; color: #333; box-shadow: 0 4px 12px rgba(250, 112, 154, 0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div style="font-size: 13px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Most Distributed</div>
-                                        <div style="font-size: 18px; font-weight: 700;" id="kpiMostDist">-</div>
-                                        <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">Top catalog</div>
-                                    </div>
-                                    <div style="font-size: 40px; opacity: 0.3;">⭐</div>
-                                </div>
-                            </div>
+                    <!-- KPI Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <div style="background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px;">
+                            <div style="font-size: 12px; color: #0369a1; font-weight: 600; margin-bottom: 4px;">TOTAL INVENTORY VALUE</div>
+                            <div style="font-size: 24px; font-weight: 700; color: #1e293b;" id="kpiTotalValue">ﾂ･0</div>
+                        </div>
+                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px;">
+                            <div style="font-size: 12px; color: #16a34a; font-weight: 600; margin-bottom: 4px;">TOTAL ITEMS</div>
+                            <div style="font-size: 24px; font-weight: 700; color: #1e293b;" id="kpiTotalItems">0</div>
+                        </div>
+                        <div style="background: #fef3c7; border: 1px solid #fde047; border-radius: 8px; padding: 16px;">
+                            <div style="font-size: 12px; color: #b45309; font-weight: 600; margin-bottom: 4px;">LOW STOCK ALERTS</div>
+                            <div style="font-size: 24px; font-weight: 700; color: #d97706;" id="kpiLowStock">0</div>
+                        </div>
+                        <div style="background: #fce7f3; border: 1px solid #fbcfe8; border-radius: 8px; padding: 16px;">
+                            <div style="font-size: 12px; color: #be185d; font-weight: 600; margin-bottom: 4px;">TOP ITEM (SALES)</div>
+                            <div style="font-size: 16px; font-weight: 700; color: #1e293b;" id="kpiTopItem">-</div>
                         </div>
                     </div>
-
-                    <!-- Dashboard Content: Two-Column Layout -->
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
-                        <!-- Left Column: Quick Actions -->
-                        <div>
-                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Quick Actions</h4>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                                <button class="dashboard-action-btn" data-tab="manageCatalog" onclick="switchTab(event, 'manageCatalog')" style="background: #f0f9ff; border: 2px solid #bfdbfe; color: #0369a1; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <div style="font-size: 20px; margin-bottom: 4px;">➕</div>
-                                    <div>Add Catalog</div>
-                                </button>
-                                <button class="dashboard-action-btn" data-tab="placeOrder" onclick="switchTab(event, 'placeOrder')" style="background: #f0fdf4; border: 2px solid #bbf7d0; color: #16a34a; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <div style="font-size: 20px; margin-bottom: 4px;">📋</div>
-                                    <div>New Order</div>
-                                </button>
-                                <button class="dashboard-action-btn" data-tab="catalogEntries" onclick="switchTab(event, 'catalogEntries')" style="background: #fef3c7; border: 2px solid #fde047; color: #b45309; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <div style="font-size: 20px; margin-bottom: 4px;">📦</div>
-                                    <div>View Inventory</div>
-                                </button>
-                                <button class="dashboard-action-btn" data-tab="orderEntries" onclick="switchTab(event, 'orderEntries')" style="background: #fce7f3; border: 2px solid #fbcfe8; color: #be185d; padding: 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-                                    <div style="font-size: 20px; margin-bottom: 4px;">📊</div>
-                                    <div>View Orders</div>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Summary Stats -->
-                        <div>
-                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Summary</h4>
-                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px;">
-                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
-                                    <span style="color: #666;">Total Records</span>
-                                    <span style="font-weight: 600;" id="dashTotalRecords">0</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9;">
-                                    <span style="color: #666;">Completed</span>
-                                    <span style="font-weight: 600;" id="dashCompleted">0</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; padding: 8px 0;">
-                                    <span style="color: #666;">Completion Rate</span>
-                                    <span style="font-weight: 600;" id="dashCompletionRate">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Activity Feed -->
-                    <hr style="margin: 32px 0;">
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
-                        <!-- Left: Activity Feed -->
-                        <div>
-                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Recent Activity</h4>
-                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-height: 400px; overflow-y: auto;" id="activityFeed">
-                                <div style="padding: 16px; text-align: center; color: #999;">Loading recent activities...</div>
-                            </div>
-                        </div>
-
-                        <!-- Right: Smart Insights -->
-                        <div>
-                            <h4 style="font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 12px; font-weight: 600;">Smart Insights</h4>
-                            
-                            <!-- Low Stock Alert -->
-                            <div id="lowStockAlertBox" style="background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: none;">
-                                <div style="font-weight: 600; color: #b45309; margin-bottom: 6px;">⚠️ Low Stock Alert</div>
-                                <div id="lowStockList" style="font-size: 12px; color: #92400e;"></div>
-                            </div>
-
-                            <!-- Top Demand Insights -->
-                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
-                                <div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">📈 Top Ordered Items</div>
-                                <div id="topDemandList" style="font-size: 12px; color: #666;">
-                                    <div style="padding: 6px 0;">Loading...</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <!-- TAB: Manage Catalog (Separate from Dashboard) -->
-                <div class="glass-card tab-section" id="tab-addCatalog" style="display:none;">
-                    <h2>➕ Add Catalog Entry</h2>
+                    
                     <form id="catalogEntryForm">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="CatalogName">カタログ名</label>
+                                <label for="CatalogName">繧ｫ繧ｿ繝ｭ繧ｰ蜷・/label>
                                 <select id="CatalogName" class="form-control" required></select>
                             </div>
                             <div class="form-group">
-                                <label for="ReceiptDate">受領日</label>
+                                <label for="ReceiptDate">蜿鈴俶律</label>
                                 <input id="ReceiptDate" class="form-control" type="date" required>
                             </div>
                             <div class="form-group">
-                                <label for="QuantityReceived">受領数量</label>
+                                <label for="QuantityReceived">蜿鈴俶焚驥・/label>
                                 <input id="QuantityReceived" class="form-control" type="number" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label for="DeliveryDate">配送日</label>
+                                <label for="DeliveryDate">驟埼∵律</label>
                                 <input id="DeliveryDate" class="form-control" type="date" required>
                             </div>
                             <div class="form-group">
-                                <label for="IssueQuantity">発行数量</label>
+                                <label for="IssueQuantity">逋ｺ陦梧焚驥・/label>
                                 <input id="IssueQuantity" class="form-control" type="number" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label for="StockQuantity">在庫数量</label>
+                                <label for="StockQuantity">蝨ｨ蠎ｫ謨ｰ驥・/label>
                                 <input id="StockQuantity" class="form-control" type="number" min="0" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="DistributionDestination">配布先</label>
+                                <label for="DistributionDestination">驟榊ｸ・・</label>
                                 <input id="DistributionDestination" class="form-control" type="text" required>
                             </div>
                             <div class="form-group">
-                                <label for="Requester">依頼者</label>
+                                <label for="Requester">萓晞ｼ閠・/label>
                                 <input id="Requester" class="form-control" type="text" required>
                             </div>
                             <div class="form-group">
-                                <label for="Remarks">備考</label>
+                                <label for="Remarks">蛯呵・/label>
                                 <input id="Remarks" class="form-control" type="text">
                             </div>
                         </div>
@@ -289,82 +156,51 @@
                     <div class="message text-center" id="message"></div>
                 </div>
                 
+                <!-- TAB: Place Order -->
                 <div class="glass-card tab-section" id="tab-placeOrder" style="display:none;">
-                    <h2>🛒 Browse & Order Products</h2>
-                    
-                    <!-- Filters Section -->
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-                            <div>
-                                <label style="display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 6px;">Search Products</label>
-                                <input type="text" id="productSearchBox" placeholder="Type product name..." class="form-control" style="font-size: 13px;">
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 6px;">Filter by Catalog</label>
-                                <select id="productFilterCatalog" class="form-control" style="font-size: 13px;">
-                                    <option value="">All Catalogs</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style="display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 6px;">Filter by Status</label>
-                                <select id="productFilterStatus" class="form-control" style="font-size: 13px;">
-                                    <option value="">All Status</option>
-                                    <option value="available">Available</option>
-                                    <option value="low">Low Stock</option>
-                                    <option value="out">Out of Stock</option>
-                                </select>
-                            </div>
-                            <div style="display: flex; align-items: flex-end;">
-                                <button class="btn btn-primary btn-sm" style="width: 100%;" id="clearFiltersBtn">Clear Filters</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Products Grid -->
-                    <div id="productsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                        <div style="grid-column: 1/-1; text-align: center; padding: 32px; color: #999;">
-                            Loading products...
-                        </div>
-                    </div>
-
-                    <!-- Quick Order Section -->
-                    <hr style="margin: 24px 0;">
-                    <h3 style="margin-bottom: 16px;">Quick Order</h3>
-                    <form id="quickOrderForm">
+                    <h2>豕ｨ譁・☆繧・/h2>
+                    <form id="orderForm">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="QuickOrderCatalog">カタログ名</label>
-                                <select id="QuickOrderCatalog" class="form-control" required></select>
+                                <label for="OrderCatalogName">繧ｫ繧ｿ繝ｭ繧ｰ蜷・/label>
+                                <select id="OrderCatalogName" class="form-control" required></select>
                             </div>
                             <div class="form-group">
-                                <label for="QuickOrderQuantity">数量</label>
-                                <input id="QuickOrderQuantity" class="form-control" type="number" min="1" value="1" required>
+                                <label for="OrderQuantity">豕ｨ譁・焚驥・/label>
+                                <input id="OrderQuantity" class="form-control" type="number" min="1" required>
                             </div>
                             <div class="form-group">
-                                <label for="QuickOrderRequester">依頼者</label>
-                                <input id="QuickOrderRequester" class="form-control" type="text" required>
-                            </div>
-                            <div class="form-group">
-                                <label>&nbsp;</label>
-                                <button type="button" class="btn btn-success btn-block" id="quickOrderBtn">Quick Order</button>
+                                <label for="OrderRequester">萓晞ｼ閠・/label>
+                                <input id="OrderRequester" class="form-control" type="text" required>
                             </div>
                         </div>
+                        <div class="form-group" style="width:100%;margin-top:12px;">
+                            <label for="OrderMessage">豕ｨ譁・Γ繝・そ繝ｼ繧ｸ</label>
+                            <div id="orderMessageToolbar" style="margin-bottom:6px;">
+                                <button type="button" class="btn btn-light btn-sm" onclick="formatOrderMsg('bold')"><b>B</b></button>
+                                <button type="button" class="btn btn-light btn-sm" onclick="formatOrderMsg('italic')"><i>I</i></button>
+                                <button type="button" class="btn btn-light btn-sm" onclick="formatOrderMsg('underline')"><u>U</u></button>
+                            </div>
+                            <div id="OrderMessage" contenteditable="true" style="min-height:90px;border:1.5px solid #e0eafc;border-radius:10px;padding:10px;background:#fff;font-size:1rem;outline:none;white-space:pre-wrap;overflow:auto;"></div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg btn-block" id="OrderBtn">豕ｨ譁・☆繧・/button>
                     </form>
+                    <div class="message text-center" id="orderMessage"></div>
                 </div>
                 
                 <!-- TAB: Catalog Entries -->
                 <div class="glass-card tab-section" id="tab-catalogEntries" style="display:none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                         <div>
-                            <h2 style="margin-bottom: 0;">カタログエントリ</h2>
+                            <h2 style="margin-bottom: 0;">繧ｫ繧ｿ繝ｭ繧ｰ繧ｨ繝ｳ繝医Μ</h2>
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <input type="text" id="catalogSearchBox" class="form-control" placeholder="Search items..." style="width: 200px; padding: 8px 12px; font-size: 14px;">
-                            <button class="btn btn-warning btn-sm" id="bulkEditBtn">✏️ Bulk Edit</button>
-                            <button class="btn btn-secondary btn-sm" id="exportCatalogCSV">📥 CSV Export</button>
-                            <button class="btn btn-secondary btn-sm" id="exportCatalogPDF">📄 PDF Export</button>
-                            <button class="btn btn-danger btn-sm" id="deleteAllCatalogBtn">全データ削除</button>
-                            <button class="btn btn-secondary btn-sm" id="generateSampleCatalogBtn">サンプルデータ生成</button>
+                            <button class="btn btn-warning btn-sm" id="bulkEditBtn">笨擾ｸ・Bulk Edit</button>
+                            <button class="btn btn-secondary btn-sm" id="exportCatalogCSV">踏 CSV Export</button>
+                            <button class="btn btn-secondary btn-sm" id="exportCatalogPDF">塘 PDF Export</button>
+                            <button class="btn btn-danger btn-sm" id="deleteAllCatalogBtn">蜈ｨ繝・・繧ｿ蜑企勁</button>
+                            <button class="btn btn-secondary btn-sm" id="generateSampleCatalogBtn">繧ｵ繝ｳ繝励Ν繝・・繧ｿ逕滓・</button>
                         </div>
                     </div>
                     <div id="catalogEntriesAccordion"></div>
@@ -373,7 +209,7 @@
                 <!-- TAB: Admin Panel -->
                 <div class="glass-card tab-section" id="tab-adminPanel" style="display:none;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                        <h2 style="margin-bottom:0;">管理者パネル - ユーザー管理</h2>
+                        <h2 style="margin-bottom:0;">邂｡逅・・ヱ繝阪Ν - 繝ｦ繝ｼ繧ｶ繝ｼ邂｡逅・/h2>
                         <div>
                             <small style="color:#666;">Admins can manage users and permissions here.</small>
                         </div>
@@ -383,8 +219,8 @@
                         <!-- Left: Users List -->
                         <div style="flex:1; min-width:320px;">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                                <h4>ユーザー一覧</h4>
-                                <button class="btn btn-sm btn-primary" id="refreshUsersBtn">更新</button>
+                                <h4>繝ｦ繝ｼ繧ｶ繝ｼ荳隕ｧ</h4>
+                                <button class="btn btn-sm btn-primary" id="refreshUsersBtn">譖ｴ譁ｰ</button>
                             </div>
                             <div style="max-height:420px; overflow:auto; border:1px solid #eee; padding:8px; border-radius:8px; background:#fff;">
                                 <table class="table table-sm" id="usersTable">
@@ -398,7 +234,7 @@
 
                         <!-- Right: User Details & Permission Editor -->
                         <div style="flex:1; min-width:360px;">
-                            <h4>ユーザー詳細 & 権限編集</h4>
+                            <h4>繝ｦ繝ｼ繧ｶ繝ｼ隧ｳ邏ｰ & 讓ｩ髯千ｷｨ髮・/h4>
 
                             <div id="selectedUserCard" style="background:#fff;padding:12px;border-radius:8px;border:1px solid #eee;">
                                 <p><strong id="selUserEmail">Select a user</strong></p>
@@ -480,13 +316,13 @@
                 <div class="glass-card tab-section" id="tab-orderEntries" style="display:none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                         <div>
-                            <h2 style="margin-bottom: 0;">注文エントリ</h2>
+                            <h2 style="margin-bottom: 0;">豕ｨ譁・お繝ｳ繝医Μ</h2>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-secondary btn-sm" id="exportOrderCSV">📥 CSV Export</button>
-                            <button class="btn btn-secondary btn-sm" id="exportOrderPDF">📄 PDF Export</button>
-                            <button class="btn btn-danger btn-sm" id="deleteAllOrderBtn">全データ削除</button>
-                            <button class="btn btn-secondary btn-sm" id="generateSampleOrderBtn">サンプルデータ生成</button>
+                            <button class="btn btn-secondary btn-sm" id="exportOrderCSV">踏 CSV Export</button>
+                            <button class="btn btn-secondary btn-sm" id="exportOrderPDF">塘 PDF Export</button>
+                            <button class="btn btn-danger btn-sm" id="deleteAllOrderBtn">蜈ｨ繝・・繧ｿ蜑企勁</button>
+                            <button class="btn btn-secondary btn-sm" id="generateSampleOrderBtn">繧ｵ繝ｳ繝励Ν繝・・繧ｿ逕滓・</button>
                         </div>
                     </div>
                     <div id="orderEntriesAccordion"></div>
@@ -494,15 +330,15 @@
                 
                 <!-- TAB: Calendar -->
                 <div class="glass-card tab-section" id="tab-stockCalendar" style="display:none;">
-                    <h2>カレンダー</h2>
+                    <h2>繧ｫ繝ｬ繝ｳ繝繝ｼ</h2>
                     <div id="stockCalendarContent"></div>
                 </div>
                 
                 <!-- TAB: Audit Log -->
                 <div class="glass-card tab-section" id="tab-auditLog" style="display:none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <h2 style="margin-bottom: 0;">監査ログ</h2>
-                        <button class="btn btn-secondary btn-sm" id="exportAuditCSV">📥 Export Log</button>
+                        <h2 style="margin-bottom: 0;">逶｣譟ｻ繝ｭ繧ｰ</h2>
+                        <button class="btn btn-secondary btn-sm" id="exportAuditCSV">踏 Export Log</button>
                     </div>
                     <div id="auditLogContent" style="max-height: 600px; overflow-y: auto;"></div>
                 </div>
@@ -510,8 +346,8 @@
                 <!-- TAB: Inventory Movement History -->
                 <div class="glass-card tab-section" id="tab-movementHistory" style="display:none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <h2 style="margin-bottom: 0;">在庫推移履歴</h2>
-                        <button class="btn btn-secondary btn-sm" id="exportMovementCSV">📥 Export History</button>
+                        <h2 style="margin-bottom: 0;">蝨ｨ蠎ｫ謗ｨ遘ｻ螻･豁ｴ</h2>
+                        <button class="btn btn-secondary btn-sm" id="exportMovementCSV">踏 Export History</button>
                     </div>
                     <div id="movementHistoryContent" style="max-height: 600px; overflow-y: auto;"></div>
                 </div>
@@ -520,42 +356,42 @@
                 <div class="glass-card tab-section" id="tab-analytics" style="display:none;">
                     <div class="glass-card" style="margin-bottom:18px;" id="analyticsDateRangeCard">
                         <form id="analyticsDateRangeForm" style="display:flex;align-items:center;gap:16px;">
-                            <label style="margin-bottom:0;font-weight:500;">期間:</label>
+                            <label style="margin-bottom:0;font-weight:500;">譛滄俣:</label>
                             <select id="analyticsDatePreset" class="form-control" style="width:auto;">
-                                <option value="7">直近7日間</option>
-                                <option value="30" selected>直近30日間</option>
-                                <option value="90">直近90日間</option>
-                                <option value="custom">カスタム</option>
+                                <option value="7">逶ｴ霑・譌･髢・/option>
+                                <option value="30" selected>逶ｴ霑・0譌･髢・/option>
+                                <option value="90">逶ｴ霑・0譌･髢・/option>
+                                <option value="custom">繧ｫ繧ｹ繧ｿ繝</option>
                             </select>
                             <input type="date" id="analyticsDateStart" class="form-control" style="width:auto;display:none;">
-                            <span id="analyticsDateDash" style="display:none;">～</span>
+                            <span id="analyticsDateDash" style="display:none;">・・/span>
                             <input type="date" id="analyticsDateEnd" class="form-control" style="width:auto;display:none;">
                         </form>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-                        <h2 style="margin-bottom: 0;">アナリティクス</h2>
-                        <button class="btn btn-primary" id="customizeAnalyticsBtn"><i class="fa-solid fa-sliders"></i> カスタマイズ</button>
+                        <h2 style="margin-bottom: 0;">繧｢繝翫Μ繝・ぅ繧ｯ繧ｹ</h2>
+                        <button class="btn btn-primary" id="customizeAnalyticsBtn"><i class="fa-solid fa-sliders"></i> 繧ｫ繧ｹ繧ｿ繝槭う繧ｺ</button>
                     </div>
                     <div id="analyticsCards" class="glass-cards"></div> 
                 </div>
             </div>
         </div>
-    </div>
+    </div>   <section header </section>
     
     <!-- Analytics Modal -->
     <div class="modal fade" id="analyticsCustomizeModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 18px;">
                 <div class="modal-header">
-                    <h5 class="modal-title">アナリティクスカードのカスタマイズ</h5>
+                    <h5 class="modal-title">繧｢繝翫Μ繝・ぅ繧ｯ繧ｹ繧ｫ繝ｼ繝峨・繧ｫ繧ｹ繧ｿ繝槭う繧ｺ</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <form id="analyticsCustomizeForm"></form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-                    <button type="button" class="btn btn-primary" id="saveAnalyticsCustomize">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">髢峨§繧・/button>
+                    <button type="button" class="btn btn-primary" id="saveAnalyticsCustomize">菫晏ｭ・/button>
                 </div>
             </div>
         </div>
